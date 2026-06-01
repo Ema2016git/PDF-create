@@ -300,20 +300,20 @@ function generateWord(soloNino) {
             content.push({
                 table: {
                     widths: ["*"],
-                    body: [[{ text: c.nombre, bold: true, color: col, fillColor: col + "18", border: [true, true, true, true], borderColor: [col, col, col, col], margin: [6, 5, 6, 5] }]]
+                    body: [[{ text: c.nombre, bold: true, color: "#ffffff", fillColor: "#333333", border: [true, true, true, true], margin: [6, 5, 6, 5] }]]
                 },
-                margin: [0, 10, 0, 4]
+                margin: [0, 10, 0, 0]
             });
 
             content.push({
                 table: {
                     widths: [140, "*"],
                     body: [
-                        [{ text: "Evaluacion", bold: true, fillColor: "#f7fafc", border: [true, true, true, true] }, { text: ev, border: [true, true, true, true] }],
-                        [{ text: "Observaciones y Sugerencias", bold: true, fillColor: "#f7fafc", border: [true, true, true, true] }, { text: obs, border: [true, true, true, true] }]
+                        [{ text: "Evaluacion", bold: true, fillColor: "#e8e8e8", border: [true, true, true, true] }, { text: ev, border: [true, true, true, true] }],
+                        [{ text: "Observaciones y Sugerencias", bold: true, fillColor: "#e8e8e8", border: [true, true, true, true] }, { text: obs, border: [true, true, true, true] }]
                     ]
                 },
-                margin: [0, 0, 0, 4]
+                margin: [0, 0, 0, 6]
             });
         }
     }
