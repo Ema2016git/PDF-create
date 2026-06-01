@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluacion de Campos Formativos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
@@ -135,11 +137,6 @@
 
 <div class="toast" id="toast"></div>
 
-<iframe id="dl-frame" name="dl-frame" style="display:none;width:0;height:0;border:none"></iframe>
-<form id="dl-form" method="POST" action="/download" target="dl-frame" style="display:none">
-    <input type="hidden" id="dl-data" name="data">
-    <input type="hidden" id="dl-filename" name="filename">
-</form>
 
 <script>
 var NINOS = ["eli", "nati", "emanuel"];
@@ -197,60 +194,79 @@ function showToast(msg) {
     setTimeout(function() { t.classList.remove("show"); }, 3000);
 }
 
+var COLORES_PDF = {
+    lenguajes: "#6366f1",
+    saberes:   "#ec4899",
+    etica:     "#f59e0b",
+    humano:    "#10b981"
+};
+
 function generateWord(soloNino) {
     var lista = soloNino ? [soloNino] : NINOS;
-    var alumnos = [];
+    var content = [];
+
+    content.push({ text: "EVALUACION DE CAMPOS FORMATIVOS", style: "titulo" });
+    content.push({ text: "Preescolar - Registro de evaluaciones y observaciones", style: "subtitulo" });
 
     for (var i = 0; i < lista.length; i++) {
         var n = lista[i];
-        var alumno = {
-            nombre: NINOS_DISPLAY[n],
-            curp: document.getElementById("curp-" + n).value.trim(),
-            campos: {}
-        };
-        for (var j = 0; j < CAMPOS.length; j++) {
-            var c = CAMPOS[j];
-            alumno.campos[c.key] = {
-                evaluacion:    document.getElementById("eval-" + n + "-" + c.key).value.trim(),
-                observaciones: document.getElementById("obs-" + n + "-" + c.key).value.trim()
-            };
+        if (i > 0) {
+            content.push({ canvas: [{ type: "line", x1: 0, y1: 4, x2: 515, y2: 4, lineWidth: 1, lineColor: "#e2e8f0" }], margin: [0, 12, 0, 12] });
         }
-        alumnos.push(alumno);
+
+        var nombre = NINOS_DISPLAY[n];
+        var curp   = document.getElementById("curp-" + n).value.trim() || "(No proporcionada)";
+
+        content.push({ text: "Alumno: " + nombre, style: "alumno" });
+        content.push({ text: [{ text: "CURP: ", bold: true }, curp], style: "curp" });
+
+        for (var j = 0; j < CAMPOS.length; j++) {
+            var c   = CAMPOS[j];
+            var col = COLORES_PDF[c.key];
+            var ev  = document.getElementById("eval-" + n + "-" + c.key).value.trim() || "(Sin evaluacion)";
+            var obs = document.getElementById("obs-" + n + "-" + c.key).value.trim() || "(Sin observaciones)";
+
+            content.push({
+                table: {
+                    widths: ["*"],
+                    body: [[{ text: c.nombre, bold: true, color: col, fillColor: col + "18", border: [true, true, true, true], borderColor: [col, col, col, col], margin: [6, 5, 6, 5] }]]
+                },
+                margin: [0, 10, 0, 4]
+            });
+
+            content.push({
+                table: {
+                    widths: [140, "*"],
+                    body: [
+                        [{ text: "Evaluacion", bold: true, fillColor: "#f7fafc", border: [true, true, true, true] }, { text: ev, border: [true, true, true, true] }],
+                        [{ text: "Observaciones y Sugerencias", bold: true, fillColor: "#f7fafc", border: [true, true, true, true] }, { text: obs, border: [true, true, true, true] }]
+                    ]
+                },
+                margin: [0, 0, 0, 4]
+            });
+        }
     }
 
-    var filename = soloNino
-        ? "Evaluacion_" + NINOS_DISPLAY[soloNino] + ".doc"
-        : "Evaluacion_Campos_Formativos.doc";
+    var docDef = {
+        content: content,
+        styles: {
+            titulo:    { fontSize: 18, bold: true, alignment: "center", margin: [0, 0, 0, 6] },
+            subtitulo: { fontSize: 11, italics: true, color: "#718096", alignment: "center", margin: [0, 0, 0, 20] },
+            alumno:    { fontSize: 14, bold: true, color: "#4f46e5", margin: [0, 10, 0, 4] },
+            curp:      { fontSize: 11, margin: [0, 0, 0, 10] }
+        },
+        defaultStyle: { fontSize: 11, font: "Roboto" },
+        pageMargins: [40, 40, 40, 40]
+    };
 
-    fetch("/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ alumnos: alumnos, filename: filename })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(resp) {
-        return fetch("/download?token=" + resp.token);
-    })
-    .then(function(r) { return r.blob(); })
-    .then(function(blob) {
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
-        a.href = url;
-        a.download = filename.replace(".doc", ".pdf");
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function() {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 500);
-        showToast(soloNino
-            ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado"
-            : "PDF de los 3 alumnos descargado");
-    })
-    .catch(function(err) {
-        alert("Error: " + err.message);
-    });
+    var filename = soloNino
+        ? "Evaluacion_" + NINOS_DISPLAY[soloNino] + ".pdf"
+        : "Evaluacion_Campos_Formativos.pdf";
+
+    pdfMake.createPdf(docDef).download(filename);
+    showToast(soloNino
+        ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado"
+        : "PDF de los 3 alumnos descargado");
 }
 
 updateProgress();
