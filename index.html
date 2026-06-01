@@ -210,8 +210,8 @@ function generateWord(soloNino) {
 
     for (var i = 0; i < lista.length; i++) {
         var n = lista[i];
-        if (i > 0) {
-            content.push({ canvas: [{ type: "line", x1: 0, y1: 4, x2: 515, y2: 4, lineWidth: 1, lineColor: "#e2e8f0" }], margin: [0, 12, 0, 12] });
+        if (i > 0 && lista.length > 1) {
+            content.push({ text: "", pageBreak: "before" });
         }
 
         var nombre = NINOS_DISPLAY[n];
