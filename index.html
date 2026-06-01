@@ -6,6 +6,7 @@
     <title>Evaluacion de Campos Formativos</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
@@ -60,6 +61,16 @@
         .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120%);background:#1e293b;color:#fff;padding:.85rem 1.5rem;border-radius:10px;font-size:.9rem;font-weight:500;box-shadow:0 10px 15px -3px rgba(0,0,0,.08);transition:transform .3s ease;z-index:999}
         .toast.show{transform:translateX(-50%) translateY(0)}
         @media(max-width:600px){header h1{font-size:1.3rem}.tabs{flex-direction:column}.card{padding:1.25rem 1rem}.btn-generate{width:100%;justify-content:center}}
+        .historial-section{margin-top:1rem}
+        .btn-historial{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.2rem;background:#fff;color:#4f46e5;border:2px solid #4f46e5;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;width:100%;justify-content:center;margin-top:.5rem}
+        .btn-historial:hover{background:#eef2ff}
+        .historial-lista{display:none;margin-top:.75rem}
+        .historial-lista.open{display:block}
+        .historial-item{background:#fff;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid #4f46e5}
+        .historial-fecha{font-size:.78rem;color:#64748b;margin-bottom:.5rem;font-weight:600}
+        .historial-campo{font-size:.85rem;margin-bottom:.4rem}
+        .historial-campo b{color:#3730a3}
+        .historial-vacio{text-align:center;color:#94a3b8;font-size:.88rem;padding:1rem}
     </style>
 </head>
 <body>
@@ -93,6 +104,10 @@
         <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('eli')">&#128196; Generar PDF de Eli</button></div>
+        <div class="historial-section">
+            <button class="btn-historial" onclick="toggleHistorial('eli')">&#128337; Ver ultimas 5 evaluaciones de Eli</button>
+            <div class="historial-lista" id="historial-eli"></div>
+        </div>
     </div>
 
     <div class="tab-panel" id="panel-nati">
@@ -108,6 +123,10 @@
         <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('nati')">&#128196; Generar PDF de Nati</button></div>
+        <div class="historial-section">
+            <button class="btn-historial" onclick="toggleHistorial('nati')">&#128337; Ver ultimas 5 evaluaciones de Nati</button>
+            <div class="historial-lista" id="historial-nati"></div>
+        </div>
     </div>
 
     <div class="tab-panel" id="panel-emanuel">
@@ -123,6 +142,10 @@
         <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('emanuel')">&#128196; Generar PDF de Emanuel</button></div>
+        <div class="historial-section">
+            <button class="btn-historial" onclick="toggleHistorial('emanuel')">&#128337; Ver ultimas 5 evaluaciones de Emanuel</button>
+            <div class="historial-lista" id="historial-emanuel"></div>
+        </div>
     </div>
 
     <div class="generate-section">
@@ -192,6 +215,52 @@ function showToast(msg) {
     t.textContent = msg;
     t.classList.add("show");
     setTimeout(function() { t.classList.remove("show"); }, 3000);
+}
+
+var SB_URL = "https://chcyyasufyytetbcofgf.supabase.co";
+var SB_KEY = "sb_publishable_tzabjNQuknrdnn3JNcJBLg_9CabE8ko";
+var sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+async function guardarEvaluacion(alumno, curp, campos) {
+    try {
+        await sb.from("evaluaciones").insert([{ alumno: alumno, curp: curp, campos: campos }]);
+    } catch(e) { console.log("Error guardando:", e); }
+}
+
+async function toggleHistorial(nino) {
+    var el = document.getElementById("historial-" + nino);
+    if (el.classList.contains("open")) {
+        el.classList.remove("open");
+        return;
+    }
+    el.classList.add("open");
+    el.innerHTML = "<p class='historial-vacio'>Cargando...</p>";
+    var nombre = NINOS_DISPLAY[nino];
+    var res = await sb.from("evaluaciones")
+        .select("*")
+        .eq("alumno", nombre)
+        .order("created_at", { ascending: false })
+        .limit(5);
+    if (!res.data || res.data.length === 0) {
+        el.innerHTML = "<p class='historial-vacio'>Sin evaluaciones guardadas aun.</p>";
+        return;
+    }
+    var html = "";
+    res.data.forEach(function(row) {
+        var fecha = new Date(row.created_at).toLocaleString("es-MX");
+        html += "<div class='historial-item'>";
+        html += "<div class='historial-fecha'>&#128197; " + fecha + " &nbsp;|&nbsp; CURP: " + (row.curp || "N/A") + "</div>";
+        var campos = row.campos || {};
+        Object.keys(campos).forEach(function(key) {
+            var c = campos[key];
+            var nombre_campo = { lenguajes:"Lenguajes", saberes:"Saberes y Pensamiento Cientifico", etica:"Etica, Naturaleza y Sociedades", humano:"De lo Humano y lo Comunitario" }[key] || key;
+            html += "<div class='historial-campo'><b>" + nombre_campo + "</b><br>";
+            html += "Eval: " + (c.evaluacion || "-") + "<br>";
+            html += "Obs: " + (c.observaciones || "-") + "</div>";
+        });
+        html += "</div>";
+    });
+    el.innerHTML = html;
 }
 
 var COLORES_PDF = {
@@ -264,9 +333,23 @@ function generateWord(soloNino) {
         : "Evaluacion_Campos_Formativos.pdf";
 
     pdfMake.createPdf(docDef).download(filename);
+
+    for (var s = 0; s < lista.length; s++) {
+        var nn = lista[s];
+        var camposGuardar = {};
+        for (var jj = 0; jj < CAMPOS.length; jj++) {
+            var cc = CAMPOS[jj];
+            camposGuardar[cc.key] = {
+                evaluacion:    document.getElementById("eval-" + nn + "-" + cc.key).value.trim(),
+                observaciones: document.getElementById("obs-" + nn + "-" + cc.key).value.trim()
+            };
+        }
+        guardarEvaluacion(NINOS_DISPLAY[nn], document.getElementById("curp-" + nn).value.trim(), camposGuardar);
+    }
+
     showToast(soloNino
-        ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado"
-        : "PDF de los 3 alumnos descargado");
+        ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado y guardado"
+        : "PDF de los 3 alumnos descargado y guardado");
 }
 
 updateProgress();
