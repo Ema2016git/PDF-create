@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluacion de Campos Formativos</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',system-ui,sans-serif;background:#f1f5f9;color:#1e293b;min-height:100vh}
+        header{background:linear-gradient(135deg,#4f46e5,#3730a3);color:#fff;padding:2rem 1rem;text-align:center}
+        header h1{font-size:1.8rem;font-weight:700;margin-bottom:.3rem}
+        header p{font-size:.95rem;opacity:.85}
+        .container{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+        .info-banner{background:linear-gradient(135deg,#eef2ff,#e0e7ff);border:1px solid #c7d2fe;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;font-size:.88rem;color:#3730a3;line-height:1.5}
+        .tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;background:#fff;padding:.5rem;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,.07)}
+        .tab-btn{flex:1;padding:.85rem 1rem;border:none;background:transparent;border-radius:8px;font-size:.95rem;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s}
+        .tab-btn:hover{background:#f1f5f9;color:#1e293b}
+        .tab-btn.active{background:#4f46e5;color:#fff;box-shadow:0 2px 8px rgba(79,70,229,.35)}
+        .tab-status{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e2e8f0;margin-left:6px;vertical-align:middle}
+        .tab-status.filled{background:#10b981}
+        .tab-panel{display:none}
+        .tab-panel.active{display:block}
+        .card{background:#fff;border-radius:12px;box-shadow:0 4px 6px -1px rgba(0,0,0,.07);padding:1.5rem;margin-bottom:1.25rem}
+        .card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:2px solid #f1f5f9}
+        .card-header .icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+        .card-header h3{font-size:1.05rem;font-weight:700}
+        .card-header p{font-size:.8rem;color:#64748b;margin-top:2px}
+        .field-group{margin-bottom:1.25rem}
+        .field-group:last-child{margin-bottom:0}
+        label{display:block;font-size:.85rem;font-weight:600;color:#1e293b;margin-bottom:.4rem}
+        input[type="text"],textarea{width:100%;padding:.75rem 1rem;border:2px solid #e2e8f0;border-radius:8px;font-size:.9rem;font-family:inherit;color:#1e293b;background:#f1f5f9;transition:border-color .2s,box-shadow .2s;resize:vertical}
+        input[type="text"]:focus,textarea:focus{outline:none;border-color:#818cf8;box-shadow:0 0 0 3px rgba(79,70,229,.12);background:#fff}
+        textarea{min-height:100px}
+        .campo-card{border-left:4px solid #4f46e5;padding-left:1.25rem}
+        .campo-1{border-left-color:#6366f1}
+        .campo-2{border-left-color:#ec4899}
+        .campo-3{border-left-color:#f59e0b}
+        .campo-4{border-left-color:#10b981}
+        .icon-1{background:#eef2ff;color:#6366f1}
+        .icon-2{background:#fdf2f8;color:#ec4899}
+        .icon-3{background:#fffbeb;color:#f59e0b}
+        .icon-4{background:#ecfdf5;color:#10b981}
+        .curp-section{border-left:4px solid #3730a3}
+        .curp-icon{background:#e0e7ff;color:#3730a3}
+        .nombre-nino{font-size:1.15rem;font-weight:700;color:#3730a3;text-align:center;margin-bottom:.25rem}
+        .section-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:#64748b;font-weight:700;margin:1.5rem 0 .75rem}
+        .individual-download{text-align:center;padding:1.5rem 0 .5rem}
+        .btn-generate{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 2.5rem;color:#fff;border:none;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:transform .15s,box-shadow .15s}
+        .btn-generate:hover{transform:translateY(-2px)}
+        .btn-generate:active{transform:translateY(0)}
+        .btn-individual{background:linear-gradient(135deg,#4f46e5,#3730a3);box-shadow:0 4px 14px rgba(79,70,229,.35)}
+        .btn-all{font-size:.9rem;padding:.75rem 1.8rem;background:linear-gradient(135deg,#64748b,#475569);box-shadow:0 4px 14px rgba(100,116,139,.3)}
+        .generate-section{text-align:center;padding:2rem 1rem}
+        .progress-bar{margin-top:1.5rem}
+        .bar-bg{width:100%;max-width:400px;height:8px;background:#e2e8f0;border-radius:4px;margin:.5rem auto 0;overflow:hidden}
+        .bar-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#10b981);border-radius:4px;transition:width .4s ease}
+        .progress-text{font-size:.85rem;color:#64748b;font-weight:500}
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120%);background:#1e293b;color:#fff;padding:.85rem 1.5rem;border-radius:10px;font-size:.9rem;font-weight:500;box-shadow:0 10px 15px -3px rgba(0,0,0,.08);transition:transform .3s ease;z-index:999}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        @media(max-width:600px){header h1{font-size:1.3rem}.tabs{flex-direction:column}.card{padding:1.25rem 1rem}.btn-generate{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Evaluacion de Campos Formativos</h1>
+    <p>Preescolar - Registro de evaluaciones y observaciones</p>
+</header>
+
+<div class="container">
+    <div class="info-banner">
+        Completa la CURP, la evaluacion y las observaciones de cada campo formativo. Puedes descargar el documento de un solo alumno o de los tres.
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('eli')">Eli <span class="tab-status" id="status-eli"></span></button>
+        <button class="tab-btn" onclick="switchTab('nati')">Nati <span class="tab-status" id="status-nati"></span></button>
+        <button class="tab-btn" onclick="switchTab('emanuel')">Emanuel <span class="tab-status" id="status-emanuel"></span></button>
+    </div>
+
+    <div class="tab-panel active" id="panel-eli">
+        <p class="nombre-nino">Eli</p>
+        <p class="section-title">Datos del alumno</p>
+        <div class="card curp-section">
+            <div class="card-header"><div class="icon curp-icon">&#128196;</div><div><h3>CURP</h3><p>Clave Unica de Registro de Poblacion</p></div></div>
+            <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-eli" placeholder="Ej: GARC010101HDFRRL09" maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
+        </div>
+        <p class="section-title">Campos Formativos</p>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-lenguajes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-eli-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-eli-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('eli')">&#128196; Generar PDF de Eli</button></div>
+    </div>
+
+    <div class="tab-panel" id="panel-nati">
+        <p class="nombre-nino">Nati</p>
+        <p class="section-title">Datos del alumno</p>
+        <div class="card curp-section">
+            <div class="card-header"><div class="icon curp-icon">&#128196;</div><div><h3>CURP</h3><p>Clave Unica de Registro de Poblacion</p></div></div>
+            <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-nati" placeholder="Ej: GARC010101HDFRRL09" maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
+        </div>
+        <p class="section-title">Campos Formativos</p>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-lenguajes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-nati-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-nati-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('nati')">&#128196; Generar PDF de Nati</button></div>
+    </div>
+
+    <div class="tab-panel" id="panel-emanuel">
+        <p class="nombre-nino">Emanuel</p>
+        <p class="section-title">Datos del alumno</p>
+        <div class="card curp-section">
+            <div class="card-header"><div class="icon curp-icon">&#128196;</div><div><h3>CURP</h3><p>Clave Unica de Registro de Poblacion</p></div></div>
+            <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-emanuel" placeholder="Ej: GARC010101HDFRRL09" maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
+        </div>
+        <p class="section-title">Campos Formativos</p>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-lenguajes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('emanuel')">&#128196; Generar PDF de Emanuel</button></div>
+    </div>
+
+    <div class="generate-section">
+        <div class="progress-bar">
+            <p class="progress-text" id="progress-text">0 de 27 campos completados</p>
+            <div class="bar-bg"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
+        </div>
+        <br>
+        <button class="btn-generate btn-all" onclick="generateWord()">&#128196; Generar PDF de los 3 alumnos</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<iframe id="dl-frame" name="dl-frame" style="display:none;width:0;height:0;border:none"></iframe>
+<form id="dl-form" method="POST" action="/download" target="dl-frame" style="display:none">
+    <input type="hidden" id="dl-data" name="data">
+    <input type="hidden" id="dl-filename" name="filename">
+</form>
+
+<script>
+var NINOS = ["eli", "nati", "emanuel"];
+var NINOS_DISPLAY = { eli: "Eli", nati: "Nati", emanuel: "Emanuel" };
+var CAMPOS = [
+    { key: "lenguajes", nombre: "Lenguajes" },
+    { key: "saberes", nombre: "Saberes y Pensamiento Cientifico" },
+    { key: "etica", nombre: "Etica, Naturaleza y Sociedades" },
+    { key: "humano", nombre: "De lo Humano y lo Comunitario" }
+];
+
+function switchTab(nino) {
+    var btns = document.querySelectorAll(".tab-btn");
+    var panels = document.querySelectorAll(".tab-panel");
+    for (var i = 0; i < btns.length; i++) { btns[i].classList.remove("active"); }
+    for (var i = 0; i < panels.length; i++) { panels[i].classList.remove("active"); }
+    var idx = NINOS.indexOf(nino);
+    btns[idx].classList.add("active");
+    document.getElementById("panel-" + nino).classList.add("active");
+}
+
+function updateProgress() {
+    var filled = 0;
+    var total = 0;
+    for (var i = 0; i < NINOS.length; i++) {
+        var n = NINOS[i];
+        total++;
+        if (document.getElementById("curp-" + n).value.trim() !== "") filled++;
+        for (var j = 0; j < CAMPOS.length; j++) {
+            total += 2;
+            if (document.getElementById("eval-" + n + "-" + CAMPOS[j].key).value.trim() !== "") filled++;
+            if (document.getElementById("obs-" + n + "-" + CAMPOS[j].key).value.trim() !== "") filled++;
+        }
+    }
+    var pct = Math.round((filled / total) * 100);
+    document.getElementById("progress-text").textContent = filled + " de " + total + " campos completados";
+    document.getElementById("progress-fill").style.width = pct + "%";
+    for (var i = 0; i < NINOS.length; i++) {
+        var n = NINOS[i];
+        var ok = true;
+        if (document.getElementById("curp-" + n).value.trim() === "") ok = false;
+        for (var j = 0; j < CAMPOS.length; j++) {
+            if (document.getElementById("eval-" + n + "-" + CAMPOS[j].key).value.trim() === "") ok = false;
+            if (document.getElementById("obs-" + n + "-" + CAMPOS[j].key).value.trim() === "") ok = false;
+        }
+        var s = document.getElementById("status-" + n);
+        if (ok) { s.classList.add("filled"); } else { s.classList.remove("filled"); }
+    }
+}
+
+function showToast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(function() { t.classList.remove("show"); }, 3000);
+}
+
+function generateWord(soloNino) {
+    var lista = soloNino ? [soloNino] : NINOS;
+    var alumnos = [];
+
+    for (var i = 0; i < lista.length; i++) {
+        var n = lista[i];
+        var alumno = {
+            nombre: NINOS_DISPLAY[n],
+            curp: document.getElementById("curp-" + n).value.trim(),
+            campos: {}
+        };
+        for (var j = 0; j < CAMPOS.length; j++) {
+            var c = CAMPOS[j];
+            alumno.campos[c.key] = {
+                evaluacion:    document.getElementById("eval-" + n + "-" + c.key).value.trim(),
+                observaciones: document.getElementById("obs-" + n + "-" + c.key).value.trim()
+            };
+        }
+        alumnos.push(alumno);
+    }
+
+    var filename = soloNino
+        ? "Evaluacion_" + NINOS_DISPLAY[soloNino] + ".doc"
+        : "Evaluacion_Campos_Formativos.doc";
+
+    fetch("/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ alumnos: alumnos, filename: filename })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(resp) {
+        return fetch("/download?token=" + resp.token);
+    })
+    .then(function(r) { return r.blob(); })
+    .then(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename.replace(".doc", ".pdf");
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 500);
+        showToast(soloNino
+            ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado"
+            : "PDF de los 3 alumnos descargado");
+    })
+    .catch(function(err) {
+        alert("Error: " + err.message);
+    });
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
