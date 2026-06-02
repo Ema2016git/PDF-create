@@ -92,10 +92,11 @@
 
     <div class="card" style="margin-bottom:1.25rem;padding:1rem 1.5rem">
         <label style="font-size:.85rem;font-weight:700;color:#3730a3;margin-bottom:.5rem;display:block">&#128197; Trimestre</label>
-        <div style="display:flex;gap:.75rem">
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
             <button class="trim-btn active" id="trim-1" onclick="selTrimestre(1)">Trimestre 1</button>
             <button class="trim-btn" id="trim-2" onclick="selTrimestre(2)">Trimestre 2</button>
             <button class="trim-btn" id="trim-3" onclick="selTrimestre(3)">Trimestre 3</button>
+            <button class="trim-btn" id="trim-4" onclick="selTrimestre(4)">Trimestre 4</button>
         </div>
     </div>
 
@@ -161,7 +162,7 @@ var TRIMESTRE_ACTUAL = 1;
 
 function selTrimestre(t) {
     TRIMESTRE_ACTUAL = t;
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i <= 4; i++) {
         document.getElementById("trim-" + i).classList.toggle("active", i === t);
     }
 }
