@@ -68,6 +68,9 @@
         .btn-historial:hover{background:#eef2ff}
         .historial-lista{display:none;margin-top:.75rem}
         .historial-lista.open{display:block}
+        .historial-cerrar{display:flex;justify-content:flex-end;margin-bottom:.5rem}
+        .btn-cerrar-historial{background:none;border:none;font-size:1.3rem;color:#94a3b8;cursor:pointer;line-height:1;padding:.2rem .5rem;border-radius:6px;transition:color .2s,background .2s}
+        .btn-cerrar-historial:hover{color:#e11d48;background:#fff1f2}
         .historial-item{background:#fff;border-radius:10px;padding:1rem 1.25rem;margin-bottom:.75rem;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid #4f46e5}
         .historial-fecha{font-size:.78rem;color:#64748b;margin-bottom:.5rem;font-weight:600}
         .historial-campo{font-size:.85rem;margin-bottom:.4rem}
@@ -265,6 +268,12 @@ async function guardarEvaluacion(alumno, curp, campos) {
     } catch(e) { console.log("Error guardando:", e); }
 }
 
+function cerrarHistorial(nino) {
+    var el = document.getElementById("historial-" + nino);
+    el.classList.remove("open");
+    el.innerHTML = "";
+}
+
 async function toggleHistorial(nino) {
     var el = document.getElementById("historial-" + nino);
     if (el.classList.contains("open")) {
@@ -272,7 +281,7 @@ async function toggleHistorial(nino) {
         return;
     }
     el.classList.add("open");
-    el.innerHTML = "<p class='historial-vacio'>Cargando...</p>";
+    el.innerHTML = "<div class='historial-cerrar'><button class='btn-cerrar-historial' onclick=\"cerrarHistorial('" + nino + "')\" title='Cerrar'>&#10005;</button></div><p class='historial-vacio'>Cargando...</p>";
     var nombre = NINOS_DISPLAY[nino];
     var res = await sb.from("evaluaciones")
         .select("*")
@@ -280,10 +289,10 @@ async function toggleHistorial(nino) {
         .order("created_at", { ascending: false })
         .limit(5);
     if (!res.data || res.data.length === 0) {
-        el.innerHTML = "<p class='historial-vacio'>Sin evaluaciones guardadas aún.</p>";
+        el.innerHTML = "<div class='historial-cerrar'><button class='btn-cerrar-historial' onclick=\"cerrarHistorial('" + nino + "')\" title='Cerrar'>&#10005;</button></div><p class='historial-vacio'>Sin evaluaciones guardadas aún.</p>";
         return;
     }
-    var html = "";
+    var html = "<div class='historial-cerrar'><button class='btn-cerrar-historial' onclick=\"cerrarHistorial('" + nino + "')\" title='Cerrar'>&#10005;</button></div>";
     res.data.forEach(function(row) {
         var fecha = new Date(row.created_at).toLocaleString("es-MX");
         html += "<div class='historial-item'>";
