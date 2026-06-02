@@ -76,6 +76,8 @@
         .trim-btn{flex:1;padding:.65rem 1rem;border:2px solid #4f46e5;background:#fff;color:#4f46e5;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
         .trim-btn:hover{background:#eef2ff}
         .trim-btn.active{background:#4f46e5;color:#fff}
+        .eval-select{width:100%;padding:.65rem 1rem;border:2px solid #e2e8f0;border-radius:8px;font-size:1rem;font-weight:700;color:#1e293b;background:#f1f5f9;cursor:pointer;transition:border-color .2s}
+        .eval-select:focus{outline:none;border-color:#818cf8;background:#fff}
     </style>
 </head>
 <body>
@@ -102,6 +104,7 @@
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('elizabeth')">Elizabeth <span class="tab-status" id="status-elizabeth"></span></button>
+        <button class="tab-btn" onclick="switchTab('natalia')">Natalia <span class="tab-status" id="status-natalia"></span></button>
         <button class="tab-btn" onclick="switchTab('emanuel')">Emanuel <span class="tab-status" id="status-emanuel"></span></button>
     </div>
 
@@ -113,14 +116,33 @@
             <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-elizabeth" value="GACE161111MVZRHLA9" maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
         </div>
         <p class="section-title">Campos Formativos</p>
-        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-lenguajes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-elizabeth-lenguajes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-elizabeth-saberes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-elizabeth-etica" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-elizabeth-humano" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('elizabeth')">&#128196; Generar TXT de Elizabeth</button></div>
         <div class="historial-section">
             <button class="btn-historial" onclick="toggleHistorial('elizabeth')">&#128337; Ver ultimas 5 evaluaciones de Elizabeth</button>
             <div class="historial-lista" id="historial-elizabeth"></div>
+        </div>
+    </div>
+
+    <div class="tab-panel" id="panel-natalia">
+        <p class="nombre-nino">Natalia Garcia Chi</p>
+        <p class="section-title">Datos del alumno</p>
+        <div class="card curp-section">
+            <div class="card-header"><div class="icon curp-icon">&#128196;</div><div><h3>CURP</h3><p>Clave Unica de Registro de Poblacion</p></div></div>
+            <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-natalia" placeholder="Escribe la CURP de Natalia..." maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
+        </div>
+        <p class="section-title">Campos Formativos</p>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-natalia-lenguajes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-natalia-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-natalia-saberes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-natalia-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-natalia-etica" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-natalia-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-natalia-humano" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-natalia-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('natalia')">&#128196; Generar TXT de Natalia</button></div>
+        <div class="historial-section">
+            <button class="btn-historial" onclick="toggleHistorial('natalia')">&#128337; Ver ultimas 5 evaluaciones de Natalia</button>
+            <div class="historial-lista" id="historial-natalia"></div>
         </div>
     </div>
 
@@ -132,10 +154,10 @@
             <div class="field-group"><label>CURP del alumno</label><input type="text" id="curp-emanuel" value="GOCE160629HNENHMA6" maxlength="18" oninput="this.value=this.value.toUpperCase();updateProgress()"></div>
         </div>
         <p class="section-title">Campos Formativos</p>
-        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-lenguajes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-1"><div class="card-header"><div class="icon icon-1">&#128214;</div><div><h3>Lenguajes</h3><p>Comunicacion, expresion y apreciacion artistica</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-emanuel-lenguajes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-lenguajes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-emanuel-saberes" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-emanuel-etica" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
+        <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion (1 al 10)</label><select class="eval-select" id="eval-emanuel-humano" onchange="updateProgress()"><option value="">-- Selecciona --</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('emanuel')">&#128196; Generar TXT de Emanuel</button></div>
         <div class="historial-section">
             <button class="btn-historial" onclick="toggleHistorial('emanuel')">&#128337; Ver ultimas 5 evaluaciones de Emanuel</button>
@@ -145,11 +167,11 @@
 
     <div class="generate-section">
         <div class="progress-bar">
-            <p class="progress-text" id="progress-text">0 de 27 campos completados</p>
+            <p class="progress-text" id="progress-text">0 campos completados</p>
             <div class="bar-bg"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
         </div>
         <br>
-        <button class="btn-generate btn-all" onclick="generateWord()">&#128196; Generar TXT de los 2 alumnos</button>
+        <button class="btn-generate btn-all" onclick="generateWord()">&#128196; Generar TXT de los 3 alumnos</button>
     </div>
 </div>
 
@@ -157,8 +179,10 @@
 
 
 <script>
-var NINOS = ["elizabeth", "emanuel"];
+var NINOS = ["elizabeth", "natalia", "emanuel"];
+var NINOS_DISPLAY = { elizabeth: "Elizabeth Garcia Chi", natalia: "Natalia Garcia Chi", emanuel: "Emanuel Gonzalez Cheong" };
 var TRIMESTRE_ACTUAL = 1;
+var TRIMESTRE_NOMBRE = { 1: "1er Trimestre", 2: "2do Trimestre", 3: "3er Trimestre", 4: "4to Trimestre" };
 
 function selTrimestre(t) {
     TRIMESTRE_ACTUAL = t;
@@ -166,7 +190,6 @@ function selTrimestre(t) {
         document.getElementById("trim-" + i).classList.toggle("active", i === t);
     }
 }
-var NINOS_DISPLAY = { elizabeth: "Elizabeth Garcia Chi", emanuel: "Emanuel Gonzalez Cheong" };
 var CAMPOS = [
     { key: "lenguajes", nombre: "Lenguajes" },
     { key: "saberes", nombre: "Saberes y Pensamiento Cientifico" },
@@ -272,7 +295,8 @@ function generateWord(soloNino) {
     var sep = "================================================";
 
     lineas.push("EVALUACION DE CAMPOS FORMATIVOS");
-    lineas.push("Educacion Primaria - Grupo 4-A  |  Trimestre " + TRIMESTRE_ACTUAL);
+    lineas.push("Educacion Primaria - Grupo 4-A");
+    lineas.push(TRIMESTRE_NOMBRE[TRIMESTRE_ACTUAL]);
     lineas.push(sep);
 
     for (var i = 0; i < lista.length; i++) {
@@ -304,9 +328,10 @@ function generateWord(soloNino) {
     var blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
     var url  = URL.createObjectURL(blob);
     var a    = document.createElement("a");
+    var trimNom = TRIMESTRE_NOMBRE[TRIMESTRE_ACTUAL].replace(/ /g, "_");
     var filename = soloNino
-        ? "Evaluacion_T" + TRIMESTRE_ACTUAL + "_" + NINOS_DISPLAY[soloNino].replace(/ /g, "_") + ".txt"
-        : "Evaluacion_T" + TRIMESTRE_ACTUAL + "_Campos_Formativos.txt";
+        ? "Evaluacion_" + trimNom + "_" + NINOS_DISPLAY[soloNino].replace(/ /g, "_") + ".txt"
+        : "Evaluacion_" + trimNom + "_3_Alumnos.txt";
     a.href = url;
     a.download = filename;
     document.body.appendChild(a);
@@ -328,7 +353,7 @@ function generateWord(soloNino) {
 
     showToast(soloNino
         ? "TXT de " + NINOS_DISPLAY[soloNino] + " descargado y guardado"
-        : "TXT de los 2 alumnos descargado y guardado");
+        : "TXT de los 3 alumnos descargado y guardado");
 }
 
 updateProgress();
