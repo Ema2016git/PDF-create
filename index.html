@@ -268,10 +268,14 @@ async function guardarEvaluacion(alumno, curp, campos) {
     } catch(e) { console.log("Error guardando:", e); }
 }
 
-function cerrarHistorial(nino) {
+async function cerrarHistorial(nino) {
+    if (!confirm("¿Borrar todas las evaluaciones guardadas de " + NINOS_DISPLAY[nino] + "?")) return;
+    var nombre = NINOS_DISPLAY[nino];
+    await sb.from("evaluaciones").delete().eq("alumno", nombre);
     var el = document.getElementById("historial-" + nino);
     el.classList.remove("open");
     el.innerHTML = "";
+    showToast("Evaluaciones de " + nombre + " eliminadas");
 }
 
 async function toggleHistorial(nino) {
