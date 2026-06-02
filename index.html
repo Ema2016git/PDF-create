@@ -73,6 +73,9 @@
         .historial-campo{font-size:.85rem;margin-bottom:.4rem}
         .historial-campo b{color:#3730a3}
         .historial-vacio{text-align:center;color:#94a3b8;font-size:.88rem;padding:1rem}
+        .trim-btn{flex:1;padding:.65rem 1rem;border:2px solid #4f46e5;background:#fff;color:#4f46e5;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}
+        .trim-btn:hover{background:#eef2ff}
+        .trim-btn.active{background:#4f46e5;color:#fff}
     </style>
 </head>
 <body>
@@ -84,7 +87,16 @@
 
 <div class="container">
     <div class="info-banner">
-        Completa la evaluacion y las observaciones de cada campo formativo. Puedes descargar el PDF de un alumno o de los dos.
+        Selecciona el trimestre, completa la evaluacion y las observaciones de cada campo formativo. Descarga el TXT de un alumno o de los dos.
+    </div>
+
+    <div class="card" style="margin-bottom:1.25rem;padding:1rem 1.5rem">
+        <label style="font-size:.85rem;font-weight:700;color:#3730a3;margin-bottom:.5rem;display:block">&#128197; Trimestre</label>
+        <div style="display:flex;gap:.75rem">
+            <button class="trim-btn active" id="trim-1" onclick="selTrimestre(1)">Trimestre 1</button>
+            <button class="trim-btn" id="trim-2" onclick="selTrimestre(2)">Trimestre 2</button>
+            <button class="trim-btn" id="trim-3" onclick="selTrimestre(3)">Trimestre 3</button>
+        </div>
     </div>
 
     <div class="tabs">
@@ -104,7 +116,7 @@
         <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-elizabeth-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-elizabeth-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('elizabeth')">&#128196; Generar PDF de Elizabeth</button></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('elizabeth')">&#128196; Generar TXT de Elizabeth</button></div>
         <div class="historial-section">
             <button class="btn-historial" onclick="toggleHistorial('elizabeth')">&#128337; Ver ultimas 5 evaluaciones de Elizabeth</button>
             <div class="historial-lista" id="historial-elizabeth"></div>
@@ -123,7 +135,7 @@
         <div class="card campo-card campo-2"><div class="card-header"><div class="icon icon-2">&#128161;</div><div><h3>Saberes y Pensamiento Cientifico</h3><p>Exploracion y comprension del mundo natural y social</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-saberes" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-saberes" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-3"><div class="card-header"><div class="icon icon-3">&#127758;</div><div><h3>Etica, Naturaleza y Sociedades</h3><p>Convivencia, valores y comprension del entorno</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-etica" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-etica" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
         <div class="card campo-card campo-4"><div class="card-header"><div class="icon icon-4">&#129309;</div><div><h3>De lo Humano y lo Comunitario</h3><p>Identidad, cuidado y bienestar colectivo</p></div></div><div class="field-group"><label>Evaluacion</label><textarea id="eval-emanuel-humano" placeholder="Escribe la evaluacion..." oninput="updateProgress()"></textarea></div><div class="field-group"><label>Observaciones y Sugerencias</label><textarea id="obs-emanuel-humano" placeholder="Escribe las observaciones..." oninput="updateProgress()"></textarea></div></div>
-        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('emanuel')">&#128196; Generar PDF de Emanuel</button></div>
+        <div class="individual-download"><button class="btn-generate btn-individual" onclick="generateWord('emanuel')">&#128196; Generar TXT de Emanuel</button></div>
         <div class="historial-section">
             <button class="btn-historial" onclick="toggleHistorial('emanuel')">&#128337; Ver ultimas 5 evaluaciones de Emanuel</button>
             <div class="historial-lista" id="historial-emanuel"></div>
@@ -136,7 +148,7 @@
             <div class="bar-bg"><div class="bar-fill" id="progress-fill" style="width:0%"></div></div>
         </div>
         <br>
-        <button class="btn-generate btn-all" onclick="generateWord()">&#128196; Generar PDF de los 2 alumnos</button>
+        <button class="btn-generate btn-all" onclick="generateWord()">&#128196; Generar TXT de los 2 alumnos</button>
     </div>
 </div>
 
@@ -145,6 +157,14 @@
 
 <script>
 var NINOS = ["elizabeth", "emanuel"];
+var TRIMESTRE_ACTUAL = 1;
+
+function selTrimestre(t) {
+    TRIMESTRE_ACTUAL = t;
+    for (var i = 1; i <= 3; i++) {
+        document.getElementById("trim-" + i).classList.toggle("active", i === t);
+    }
+}
 var NINOS_DISPLAY = { elizabeth: "Elizabeth Garcia Chi", emanuel: "Emanuel Gonzalez Cheong" };
 var CAMPOS = [
     { key: "lenguajes", nombre: "Lenguajes" },
@@ -245,76 +265,52 @@ async function toggleHistorial(nino) {
     el.innerHTML = html;
 }
 
-var COLORES_PDF = {
-    lenguajes: "#000000",
-    saberes:   "#000000",
-    etica:     "#000000",
-    humano:    "#000000"
-};
-
 function generateWord(soloNino) {
     var lista = soloNino ? [soloNino] : NINOS;
-    var content = [];
+    var lineas = [];
+    var sep = "================================================";
 
-    content.push({ text: "EVALUACION DE CAMPOS FORMATIVOS", style: "titulo" });
-    content.push({ text: "Educacion Primaria - Grupo 4-A", style: "subtitulo" });
+    lineas.push("EVALUACION DE CAMPOS FORMATIVOS");
+    lineas.push("Educacion Primaria - Grupo 4-A  |  Trimestre " + TRIMESTRE_ACTUAL);
+    lineas.push(sep);
 
     for (var i = 0; i < lista.length; i++) {
         var n = lista[i];
-        if (i > 0 && lista.length > 1) {
-            content.push({ text: "", pageBreak: "before" });
-        }
+        if (i > 0) lineas.push("\n" + sep + "\n");
 
         var nombre = NINOS_DISPLAY[n];
         var curp   = document.getElementById("curp-" + n).value.trim() || "(No proporcionada)";
 
-        content.push({ text: "Alumno: " + nombre, style: "alumno" });
-        content.push({ text: [{ text: "CURP: ", bold: true }, curp], style: "curp" });
+        lineas.push("\nAlumno: " + nombre);
+        lineas.push("CURP:   " + curp);
+        lineas.push("");
 
         for (var j = 0; j < CAMPOS.length; j++) {
             var c   = CAMPOS[j];
-            var col = COLORES_PDF[c.key];
             var ev  = document.getElementById("eval-" + n + "-" + c.key).value.trim() || "(Sin evaluacion)";
             var obs = document.getElementById("obs-" + n + "-" + c.key).value.trim() || "(Sin observaciones)";
 
-            content.push({
-                table: {
-                    widths: ["*"],
-                    body: [[{ text: c.nombre, bold: true, color: "#ffffff", fillColor: "#333333", border: [true, true, true, true], margin: [6, 5, 6, 5] }]]
-                },
-                margin: [0, 10, 0, 0]
-            });
-
-            content.push({
-                table: {
-                    widths: [140, "*"],
-                    body: [
-                        [{ text: "Evaluacion", bold: true, fillColor: "#e8e8e8", border: [true, true, true, true] }, { text: ev, border: [true, true, true, true] }],
-                        [{ text: "Observaciones y Sugerencias", bold: true, fillColor: "#e8e8e8", border: [true, true, true, true] }, { text: obs, border: [true, true, true, true] }]
-                    ]
-                },
-                margin: [0, 0, 0, 6]
-            });
+            lineas.push("--- " + c.nombre + " ---");
+            lineas.push("Evaluacion:");
+            lineas.push("  " + ev);
+            lineas.push("Observaciones y Sugerencias:");
+            lineas.push("  " + obs);
+            lineas.push("");
         }
     }
 
-    var docDef = {
-        content: content,
-        styles: {
-            titulo:    { fontSize: 18, bold: true, alignment: "center", margin: [0, 0, 0, 6] },
-            subtitulo: { fontSize: 11, italics: true, color: "#718096", alignment: "center", margin: [0, 0, 0, 20] },
-            alumno:    { fontSize: 14, bold: true, color: "#4f46e5", margin: [0, 10, 0, 4] },
-            curp:      { fontSize: 11, margin: [0, 0, 0, 10] }
-        },
-        defaultStyle: { fontSize: 11, font: "Roboto" },
-        pageMargins: [40, 40, 40, 40]
-    };
-
+    var texto = lineas.join("\n");
+    var blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement("a");
     var filename = soloNino
-        ? "Evaluacion_" + NINOS_DISPLAY[soloNino] + ".pdf"
-        : "Evaluacion_Campos_Formativos.pdf";
-
-    pdfMake.createPdf(docDef).download(filename);
+        ? "Evaluacion_T" + TRIMESTRE_ACTUAL + "_" + NINOS_DISPLAY[soloNino].replace(/ /g, "_") + ".txt"
+        : "Evaluacion_T" + TRIMESTRE_ACTUAL + "_Campos_Formativos.txt";
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 500);
 
     for (var s = 0; s < lista.length; s++) {
         var nn = lista[s];
@@ -330,8 +326,8 @@ function generateWord(soloNino) {
     }
 
     showToast(soloNino
-        ? "PDF de " + NINOS_DISPLAY[soloNino] + " descargado y guardado"
-        : "PDF de los 2 alumnos descargado y guardado");
+        ? "TXT de " + NINOS_DISPLAY[soloNino] + " descargado y guardado"
+        : "TXT de los 2 alumnos descargado y guardado");
 }
 
 updateProgress();
